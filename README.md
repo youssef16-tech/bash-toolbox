@@ -10,6 +10,7 @@ Rust web app (ClipVue). Built while learning DevOps.
 | `backup-db.sh` | Safe, timestamped SQLite backup of ClipVue's database, prunes copies older than 7 days. Runs nightly via a systemd timer. |
 | `health-check.sh` | Checks that the ClipVue systemd service is active and its HTTP endpoint returns 200. Exits non-zero on failure (monitoring-friendly). |
 | `log-analyzer.sh` | Parses ClipVue's journald request logs: total requests, breakdown by HTTP status code, and top 5 requested endpoints. |
+| `deploy.sh` | One-command deploy: git pull, cargo build --release, restart the systemd service, then run the health check. Stops before restarting if the build fails. |
 
 ## Conventions
 - Every script starts with `#!/usr/bin/env bash` and `set -euo pipefail`.
