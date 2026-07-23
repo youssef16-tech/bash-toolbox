@@ -8,6 +8,7 @@ Rust web app (ClipVue). Built while learning DevOps.
 | Script | What it does |
 |--------|--------------|
 | `backup-db.sh` | Safe, timestamped SQLite backup of ClipVue's database, prunes copies older than 7 days. Runs nightly via a systemd timer. |
+| `health-check.sh` | Checks that the ClipVue systemd service is active and its HTTP endpoint returns 200. Exits non-zero on failure (monitoring-friendly). |
 
 ## Conventions
 - Every script starts with `#!/usr/bin/env bash` and `set -euo pipefail`.
