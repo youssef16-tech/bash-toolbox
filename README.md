@@ -12,7 +12,7 @@ Rust web app (ClipVue). Built while learning DevOps.
 | `log-analyzer.sh` | Parses ClipVue's journald request logs: total requests, breakdown by HTTP status code, and top 5 requested endpoints. |
 | `deploy.sh` | One-command deploy: git pull, cargo build --release, restart the systemd service, then run the health check. Stops before restarting if the build fails. |
 | `cleanup.sh` | Reclaims disk space: reports usage, vacuums journal logs older than 14 days, prunes old backups. Shows before/after disk usage. |
-| `install-design-skills.sh` | Installs three Claude Code design skills (impeccable, design-motion-principles, frontend-design) into `~/.claude/skills` so they're available in every project on this machine. Re-run to update. |
+| `install-design-skills.sh` | Installs three Claude Code design skills (impeccable, design-motion-principles, frontend-design) into `~/.claude` so they're available in every project on this machine. Re-run to update. |
 
 ## Claude Code design skills
 
@@ -29,16 +29,28 @@ uses them on any frontend work I do on this laptop:
 ./install-design-skills.sh
 ```
 
-Installs into `~/.claude/skills/<name>/`, keeping the upstream git clones in
-`~/.claude/.skill-sources/`. Restart Claude Code afterwards and check `/skills`.
-The skills load on their own when a task looks like design work; you can also name
-one directly ("use the impeccable skill on this page").
+`impeccable` goes in as a Claude Code plugin, which brings its agents, hooks and
+~23 `/impeccable` slash commands (`/impeccable polish`, `/impeccable audit`,
+`/impeccable typeset`, ...) along with the skill. That needs the `claude` CLI; if
+it isn't on `PATH` the script falls back to installing just the skill, and
+`--impeccable=skill` forces that mode:
+
+```bash
+./install-design-skills.sh --impeccable=skill
+```
+
+Switching back to `--impeccable=plugin` later removes the standalone copy so the
+skill isn't registered twice.
+
+The other two are copied into `~/.claude/skills/<name>/`, with the upstream git
+clones kept in `~/.claude/.skill-sources/`. Restart Claude Code afterwards and
+check `/skills` (and `/plugin` for impeccable). The skills load on their own when
+a task looks like design work; you can also name one directly ("use the
+impeccable skill on this page").
 
 Note: `impeccable` and `design-motion-principles` are community projects, not
 Anthropic-published — the installer pulls whatever is on their default branch.
-`impeccable` also ships ~23 slash commands, which only come with the plugin
-install (`/plugin marketplace add pbakaus/impeccable`, then pick it from `/plugin`);
-this script installs the skill itself.
+The impeccable plugin also installs hooks, which run on your machine.
 
 ## Conventions
 - Every script starts with `#!/usr/bin/env bash` and `set -euo pipefail`.
