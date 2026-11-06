@@ -1,6 +1,7 @@
 [Unit]
-Description= runs every 2 mins
+Description= runs count404 daily at 3AM
 [Timer]
-OnCalendar = *:0/2
+OnCalendar =*-*-* 03:00:00
+Persistent=true
 [Install]
 WantedBy = timers.target
