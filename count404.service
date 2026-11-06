@@ -1,0 +1,4 @@
+[Unit]
+Description= Count 404s in nginx logs
+[Service]
+ExecStart=/usr/local/bin/count404.sh

@@ -1,0 +1,6 @@
+[Unit]
+Description= runs every 2 mins
+[Timer]
+OnCalendar = *:0/2
+[Install]
+WantedBy = timers.target
