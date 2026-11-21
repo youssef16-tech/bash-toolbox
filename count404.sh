@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 for book in /var/log/nginx/access.log /var/log/nginx/access.log-20261105 /var/log/nginx/banana.log
 do
     if [ -r "$book" ]; then 
