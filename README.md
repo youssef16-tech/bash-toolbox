@@ -1,57 +1,8 @@
 # bash-toolbox
 
-A collection of practical Bash scripts I use to operate my own Linux machine and my
-Rust web app (ClipVue). Built while learning DevOps.
+Scripts I wrote while learning Linux and Docker.
 
-## Scripts
-
-| Script | What it does |
-|--------|--------------|
-| `backup-db.sh` | Safe, timestamped SQLite backup of ClipVue's database, prunes copies older than 7 days. Runs nightly via a systemd timer. |
-| `health-check.sh` | Checks that the ClipVue systemd service is active and its HTTP endpoint returns 200. Exits non-zero on failure (monitoring-friendly). |
-| `log-analyzer.sh` | Parses ClipVue's journald request logs: total requests, breakdown by HTTP status code, and top 5 requested endpoints. |
-| `deploy.sh` | One-command deploy: git pull, cargo build --release, restart the systemd service, then run the health check. Stops before restarting if the build fails. |
-| `cleanup.sh` | Reclaims disk space: reports usage, vacuums journal logs older than 14 days, prunes old backups. Shows before/after disk usage. |
-| `install-design-skills.sh` | Installs three Claude Code design skills (impeccable, design-motion-principles, frontend-design) into `~/.claude` so they're available in every project on this machine. Re-run to update. |
-
-## Claude Code design skills
-
-`install-design-skills.sh` sets up the three design skills globally, so Claude Code
-uses them on any frontend work I do on this laptop:
-
-| Skill | Source | What it adds |
-|-------|--------|--------------|
-| `impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | Typography, color, spacing, layout and anti-"AI slop" design fluency. |
-| `design-motion-principles` | [kylezantos/design-motion-principles](https://github.com/kylezantos/design-motion-principles) | Motion and interaction principles; builds components with motion or audits existing animation. |
-| `frontend-design` | [anthropics/claude-code](https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design) | Anthropic's official frontend design skill for distinctive, intentional UI. |
-
-```bash
-./install-design-skills.sh
-```
-
-`impeccable` goes in as a Claude Code plugin, which brings its agents, hooks and
-~23 `/impeccable` slash commands (`/impeccable polish`, `/impeccable audit`,
-`/impeccable typeset`, ...) along with the skill. That needs the `claude` CLI; if
-it isn't on `PATH` the script falls back to installing just the skill, and
-`--impeccable=skill` forces that mode:
-
-```bash
-./install-design-skills.sh --impeccable=skill
-```
-
-Switching back to `--impeccable=plugin` later removes the standalone copy so the
-skill isn't registered twice.
-
-The other two are copied into `~/.claude/skills/<name>/`, with the upstream git
-clones kept in `~/.claude/.skill-sources/`. Restart Claude Code afterwards and
-check `/skills` (and `/plugin` for impeccable). The skills load on their own when
-a task looks like design work; you can also name one directly ("use the
-impeccable skill on this page").
-
-Note: `impeccable` and `design-motion-principles` are community projects, not
-Anthropic-published — the installer pulls whatever is on their default branch.
-The impeccable plugin also installs hooks, which run on your machine.
-
-## Conventions
-- Every script starts with `#!/usr/bin/env bash` and `set -euo pipefail`.
-- Scripts are `chmod 700` (owner-only execute).
+- errors.sh: counts errors in nginx's access.log
+- count404.sh: counts 404s in the nginx log files, with 3 checks: readable, exists but locked, doesn't exist
+- count404.service + count404.timer: systemd unit files that run count404.sh daily at 3 AM
+- Dockerfile: runs count404.sh in an alpine-based image (script switched to sh to keep the image small)
